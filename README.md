@@ -7,4 +7,4 @@ Dun-Gen
 - Christopher Audette
 - David Bittle
 - Philip Rowe
-- Samuel Tobey
+- Samuel P. Tobey
