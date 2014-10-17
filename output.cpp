@@ -2,12 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-// g++ -c -Wall output.cpp -o output.o
-// g++ output.cpp -o output -L output.o
-// ./output
-// cat test.txt
-// :)
-
 int main() {
 	
 	std::ofstream ofs("test.txt");
