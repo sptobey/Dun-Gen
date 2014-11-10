@@ -1,11 +1,11 @@
 # Makefile for Dun-Gen
 
-all: output
+all: Dun-Gen
 	@make clean
 
-output: Dun-Gen.o
+Dun-Gen: Dun-Gen.o
 	g++ Dun-Gen.cpp -o Dun-Gen -L Dun-Gen.o
-output.o: 
+Dun-Gen.o: 
 	g++ -c -Wall Dun-Gen.cpp -o Dun-Gen.o
 clean:
 	@rm -f *.o
