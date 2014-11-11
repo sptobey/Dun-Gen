@@ -170,7 +170,7 @@ int main() {
   unsigned long int s;
   int w,h;
   string n;
-  std::cout<<"Please enter a width, a height, a seed, and a name:\n"<<std::endl;
+  std::cout<<"Please enter a width, a height, a seed, and a name:"<<std::endl;
   std::cin>> w >> h >> s >> n;
   Dungeon my_dungeon = Dungeon(w,h,s);
   my_dungeon.outputDungeon(n);
