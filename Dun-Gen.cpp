@@ -25,24 +25,13 @@ public:
   Dungeon();
   unsigned long int seed;
   int height, width;
-  Dungeon(int, int, int);
   void outputDungeon(std::string name);
 };
 // Full Constructor
 Dungeon::Dungeon (int w, int h, unsigned long int s) {
   seed = s;
-  if(width <= 0){
-    width = 1;
-  }
-  else{
-    width = w;
-  }
-  if(height <= 0){
-    height = 1;
-  }
-  else{
-    height = h;
-  }
+  width = ((w <= 0) ? 1 : w);
+  height = ((h <= 0) ? 1 : h);
   buildEmpty();
   buildDungeon();
 }
@@ -51,18 +40,8 @@ Dungeon::Dungeon (int w, int h, unsigned long int s) {
 Dungeon::Dungeon(int w, int h) {
   srand(time(NULL));
   seed = rand();
-  if(width <= 0){
-    width = 1;
-  }
-  else{
-    width = w;
-  }
-  if(height <= 0){
-    height = 1;
-  }
-  else{
-    height = h;
-  }
+  width = ((w <= 0) ? 1 : w);
+  height = ((h <= 0) ? 1 : h);
   buildEmpty();
   buildDungeon();
 }
