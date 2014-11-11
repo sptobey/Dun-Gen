@@ -12,4 +12,4 @@ Dun-Gen
 ######Instructions:
 - Compile with: make
 - Run with: ./Dun-Gen
-- Dungeon stored in <some_name>.txt
+- Dungeon stored in \<some_name\>.txt
