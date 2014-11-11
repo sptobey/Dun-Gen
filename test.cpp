@@ -16,7 +16,8 @@ using namespace std;
 /* Dungeon class */
 class Dungeon {
 private:
-  short unsigned int** dCont = NULL;
+//  short unsigned int** dCont = NULL;
+  short unsigned int** dCont;
   void buildEmpty();
   void buildDungeon();
 public:
@@ -88,8 +89,8 @@ void Dungeon::buildEmpty(){
 
 // Builds the actual full dungeon from one full of blank tiles.
 void Dungeon::buildDungeon(){
-//a couple loops to put walls on the edges of the dungeon
-	for(int i = 0; i < height; i++){
+//Building the walls of the dungeon
+for(int i = 0; i < height; i++){
     dCont[i][0] = WALL;
 	dCont[i][width-1]=WALL;
   }
@@ -98,6 +99,9 @@ void Dungeon::buildDungeon(){
 	  dCont[0][j] = WALL;
 	  dCont[height-1][j] = WALL;
 	}
+
+
+
 
   /* Pathfinding algorithm here maybe?  Set it up how you want.
   // Maybe should take args for options?  Still thinking this one out.*/
@@ -117,8 +121,10 @@ class Subdungeon {
     unsigned short int key;  //What number each room corresponds to.
 	static unsigned short int total;
 	std::string desc;
-	short unsigned int* boundsx = NULL;
-	short unsigned int* boundsy = NULL;
+	//short unsigned int* boundsx = NULL;
+	//short unsigned int* boundsy = NULL;
+	short unsigned int* boundsx;
+	short unsigned int* boundsy;
 	short unsigned int height;
 	short unsigned int width;
 };
@@ -141,6 +147,8 @@ Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w){
 
 void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
   if(s == 0){ //Rectangular room; we may not have time to implement more
+    //int boundsx[2];
+    //int boundsy[2];
     boundsx = new short unsigned int [2];
 	boundsy = new short unsigned int [2];
 	boundsx[0] = posx;
@@ -184,6 +192,7 @@ int main() {
   std::cout<<"Please enter a width, a height, a seed, and a name:"<<std::endl;
   std::cin>> w >> h >> s >> n;
   Dungeon my_dungeon = Dungeon(w,h,s);
+  
   my_dungeon.outputDungeon(n);
   
   return 0;
