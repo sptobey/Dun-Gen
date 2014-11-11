@@ -9,7 +9,7 @@ Dun-Gen
 - Philip Rowe
 - Samuel P. Tobey
 
-##Instructions:
+######Instructions:
 - Compile with: make
 - Run with: ./Dun-Gen
 - Dungeon stored in <some_name>.txt
