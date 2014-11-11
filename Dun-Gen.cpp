@@ -26,6 +26,7 @@ public:
   unsigned long int seed;
   int height, width;
   Dungeon(int, int, int);
+  void outputDungeon(std::string name);
 };
 // Full Constructor
 Dungeon::Dungeon (int w, int h, unsigned long int s) {
@@ -76,14 +77,31 @@ Dungeon::Dungeon(){
   buildDungeon();
 }
 
+void Dungeon::outputDungeon(string dungeon_name){
+  dungeon_name.append(".txt");
+  const char* c = dungeon_name.c_str();
+  std::ofstream ofs(c);
+  if(!ofs) {
+    std::cerr<<"Failed to open output file"<<std::endl;
+  }
+  
+  for(int i=0; i<height; i++) {
+    for(int j=0; j<width; j++) {
+      ofs<<dCont[i][j];
+    }
+    ofs<<"\n";
+  }
+  ofs.close();
+}
+
 // Builds a dungeon full of blank tiles
 void Dungeon::buildEmpty(){
-  dCont = new short unsigned int*[width];  //hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
+  dCont = new short unsigned int*[height];  //hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
   for(int k = 0; k < height; ++k){
-    dCont[k] = new short unsigned int[height];
+    dCont[k] = new short unsigned int[width];
   }
-  for(int i = 0; i < width; i++){
-    for(int j = 0; j < height; j++){
+  for(int i = 0; i < height; i++){
+    for(int j = 0; j < width; j++){
 	  dCont[i][j] = BLANK;
 	}
   }
@@ -170,14 +188,13 @@ void Subdungeon::randDescribe(){  //More might be added to this later
 
 int main() {
   
-  std::ofstream ofs("test.txt");
-  
-  if(!ofs) {
-    std::cerr<<"Failed to open output file"<<std::endl;
-  }
-  
-  ofs<<"\nThis is a test.\nRandom text here...\n\n";
-  ofs.close();
+  unsigned long int s;
+  int w,h;
+  string n;
+  std::cout<<"Please enter a width, a height, a seed, and a name:\n"<<std::endl;
+  std::cin>> w >> h >> s >> n;
+  Dungeon my_dungeon = Dungeon(w,h,s);
+  my_dungeon.outputDungeon(n);
   
   return 0;
 }
