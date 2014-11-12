@@ -11,6 +11,7 @@
 #include <time.h>
 #include <string>
 #include <sstream>
+#include "Subdungeon.h"
 
 #define BLANK 0
 #define FLOOR 1
@@ -18,12 +19,15 @@
 
 using namespace std;
 
+class Dungeon;
+
+
 /* Dungeon class */
 class Dungeon {
 private:
   short unsigned int** dCont = NULL;
   void buildEmpty();
-  void buildDungeon();
+  void buildDungeon(unsigned short rax, unsigned short rin, unsigned short rum);
 public:
   Dungeon(int w, int h, unsigned long int s);
   Dungeon(int w, int h);
@@ -38,7 +42,7 @@ Dungeon::Dungeon (int w, int h, unsigned long int s) {
   width = ((w <= 0) ? 1 : w);
   height = ((h <= 0) ? 1 : h);
   buildEmpty();
-  buildDungeon();
+  buildDungeon(3, ((w*h)/4), ((w*h)/3));
 }
 
 // Constructor w/out Seed
@@ -48,7 +52,7 @@ Dungeon::Dungeon(int w, int h) {
   width = ((w <= 0) ? 1 : w);
   height = ((h <= 0) ? 1 : h);
   buildEmpty();
-  buildDungeon();
+  buildDungeon(3, ((w*h)/4), ((w*h)/3));
 }
 
 // Default Constructor
@@ -58,7 +62,7 @@ Dungeon::Dungeon(){
   width = 30;
   height = 30;
   buildEmpty();
-  buildDungeon();
+  buildDungeon(3, 8, 20);
 }
 
 void Dungeon::outputDungeon(string dungeon_name){
@@ -100,17 +104,54 @@ void Dungeon::buildEmpty(){
 }
 
 // Builds the actual full dungeon from one full of blank tiles.
-void Dungeon::buildDungeon(){
+void Dungeon::buildDungeon(unsigned short rax, unsigned short rin, unsigned short rum){
+//Using the seed finally; this guarantees any given seed will generate the same dungeon every time
+    srand(Dungeon::seed);
+	unsigned short roomMax, roomMin, roomNumMax;
+	Subdungeon **rooms;
+	roomMax = rax; // Maximum room area
+	roomMin = rin; // Minimum room area
+	roomNumMax = rum; // Maximum number of rooms that can be placed
+	rooms = new Subdungeon *[roomNumMax];
+	
+	// Generating list of rooms
+	for(int r = 0; r < roomNumMax; r++){
+	  int posx = (rand() % (Dungeon::width - 1))+1; //corner can be anywhere except edges
+	  int posy = (rand() % (Dungeon::height - 1))+1; //same as above
+	  int roomWidth = 0;
+	  int roomHeight = 0;
+	  // This loop continues going until we have a room area between our max and our min.
+	  while ((roomWidth*roomHeight <= roomMin)  || (roomWidth*roomHeight >= roomMax)){ 
+	    roomWidth = (rand()%(roomMax/2))+1;
+		roomHeight = (rand()%(roomMax/2))+1;
+		// checks if the room goes out of bounds of the dungeon; if so, resizes the room again.
+		if ( (posx+roomWidth-1 >= Dungeon::width) || (posy+roomHeight-1 >= Dungeon::height)){
+		  roomWidth = 0;
+		}
+		
+	  }
+	  rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
+	}
+	
+	// Placing rooms; will just rekey and place a different room if a room fails a test.
+	// Haven't written yet
+	for (int k = 0; k <= roomNumMax; k++){
+	}
+
 //a couple loops to put walls on the edges of the dungeon
 	for(int i = 0; i < height; i++){
     dCont[i][0] = WALL;
-	dCont[i][width-1]=WALL;
+	dCont[i][width-1]= WALL;
   }
 
    for(int j = 0; j < width; j++){
 	  dCont[0][j] = WALL;
 	  dCont[height-1][j] = WALL;
 	}
+	
+	
+	
+	
 
   /* Pathfinding algorithm here maybe?  Set it up how you want.
   // Maybe should take args for options?  Still thinking this one out.*/
@@ -118,74 +159,6 @@ void Dungeon::buildDungeon(){
 
 /* End Dungeon class */
 
-/* Begin Subdungeon class */
-// This is a designator laid out on rooms, complete with number, position, etc.
-
-class Subdungeon {
-  private:
-    void shapeSize(int s, int posx, int posy, int h, int w);
-	void randDescribe();
-  public:
-    Subdungeon(int shape, int posx, int posy, int h, int w);
-    unsigned short int key;  //What number each room corresponds to.
-	static unsigned short int total;
-	std::string desc;
-	short unsigned int* boundsx = NULL;
-	short unsigned int* boundsy = NULL;
-	short unsigned int height;
-	short unsigned int width;
-};
-
-unsigned short int Subdungeon::total = 0;
-
-/* Subdungeon constructor, shape is room shape designator (rectangles, right triangles, 
-// equalaterial triangles, etc)
-// posx and posy are coordinates for corner closest to 0 on both scales for rectangles
-// will be different for other room shapes, particularly hexagons 
-// desc is room description, which should be created by a function. */
-Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w){
-  total++;
-  key = total;
-  shapeSize(shape, posx, posy, h, w);
-  height = h;
-  width = w;
-  randDescribe();
-}
-
-void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
-  if(s == 0){ //Rectangular room; we may not have time to implement more
-    boundsx = new short unsigned int [2];
-	boundsy = new short unsigned int [2];
-	boundsx[0] = posx;
-	boundsx[1] = posx+w-1;
-	boundsy[0] = posy;
-	boundsy[1] = posy+h-1;
-  }
-  else{
-    cout << "Invalid shape.";
-  }
-}
-
-void Subdungeon::randDescribe(){  //More might be added to this later
-  stringstream x;
-  stringstream y;
-  x << Subdungeon::width-2;
-  y << Subdungeon::height-2;
-  std::string xs, ys;
-  xs = x.str();
-  ys = y.str();
-  std::string hold;
-  hold = "This room is";
-  hold.append(xs);
-  hold.append(" feet by ");
-  hold.append(ys);
-  hold.append(" feet.  ");
-  desc = hold;
-}
-
-
-
-/* End Subdungeon class */
 
 
 
