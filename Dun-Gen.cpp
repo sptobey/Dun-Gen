@@ -1,4 +1,9 @@
-// Test for outputting text into a new file
+/* Dun-Gen.cpp
+ * Christopher Audette,
+ * Samuel P. Tobey,
+ * David Bittle,
+ * Philip Rowe
+ */
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
@@ -66,7 +71,15 @@ void Dungeon::outputDungeon(string dungeon_name){
   
   for(int i=0; i<height; i++) {
     for(int j=0; j<width; j++) {
-      ofs<<dCont[i][j];
+      if(dCont[i][j] == BLANK) {
+        ofs << ' ';
+      } else if(dCont[i][j] == FLOOR) {
+        ofs << '.';
+      } else if(dCont[i][j] == WALL) {
+        ofs << '#';
+      } else {
+        ofs<<dCont[i][j];
+      }
     }
     ofs<<"\n";
   }
