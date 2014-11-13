@@ -42,7 +42,7 @@ Dungeon::Dungeon (int w, int h, unsigned long int s) {
   width = ((w <= 0) ? 1 : w);
   height = ((h <= 0) ? 1 : h);
   buildEmpty();
-  buildDungeon(3, ((w*h)/4), ((w*h)/3));
+  buildDungeon(9, ((w*h)/4), ((w*h)/3));
 }
 
 // Constructor w/out Seed
@@ -52,7 +52,7 @@ Dungeon::Dungeon(int w, int h) {
   width = ((w <= 0) ? 1 : w);
   height = ((h <= 0) ? 1 : h);
   buildEmpty();
-  buildDungeon(3, ((w*h)/4), ((w*h)/3));
+  buildDungeon(9, ((w*h)/4), ((w*h)/3));
 }
 
 // Default Constructor
@@ -62,7 +62,7 @@ Dungeon::Dungeon(){
   width = 30;
   height = 30;
   buildEmpty();
-  buildDungeon(3, 8, 20);
+  buildDungeon(9, 30, 20);
 }
 
 void Dungeon::outputDungeon(string dungeon_name){
@@ -116,19 +116,18 @@ void Dungeon::buildDungeon(unsigned short rax, unsigned short rin, unsigned shor
 	
 	// Generating list of rooms
 	for(int r = 0; r < roomNumMax; r++){
-	  int posx = (rand() % (Dungeon::width - 1))+1; //corner can be anywhere except edges
-	  int posy = (rand() % (Dungeon::height - 1))+1; //same as above
+	  int posx = (rand() % (Dungeon::width - roomMin))+1; //corner can be anywhere except edges
+	  int posy = (rand() % (Dungeon::height - roomMin))+1; //same as above: roomMin should have an int based sqrt function or something equivalent
 	  int roomWidth = 0;
 	  int roomHeight = 0;
 	  // This loop continues going until we have a room area between our max and our min.
-	  while ((roomWidth*roomHeight <= roomMin)  || (roomWidth*roomHeight >= roomMax)){ 
+	  while ((roomWidth*roomHeight < roomMin)  || (roomWidth*roomHeight > roomMax)){ 
 	    roomWidth = (rand()%(roomMax/2))+1;
 		roomHeight = (rand()%(roomMax/2))+1;
 		// checks if the room goes out of bounds of the dungeon; if so, resizes the room again.
 		if ( (posx+roomWidth-1 >= Dungeon::width) || (posy+roomHeight-1 >= Dungeon::height)){
 		  roomWidth = 0;
 		}
-		
 	  }
 	  rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
 	}
@@ -136,6 +135,7 @@ void Dungeon::buildDungeon(unsigned short rax, unsigned short rin, unsigned shor
 	// Placing rooms; will just rekey and place a different room if a room fails a test.
 	// Haven't written yet
 	for (int k = 0; k <= roomNumMax; k++){
+	  
 	}
 
 //a couple loops to put walls on the edges of the dungeon
