@@ -39,8 +39,8 @@ public:
 // Full Constructor
 Dungeon::Dungeon (int w, int h, unsigned long int s) {
   seed = s;
-  width = ((w <= 0) ? 1 : w);
-  height = ((h <= 0) ? 1 : h);
+  width = ((w <= 30) ? 30 : w);
+  height = ((h <= 30) ? 30 : h);
   buildEmpty();
   int w_trunc = width/3;      // The maximum number of rooms is the product of two floor divisions,
   int h_trunc = height/3;     // since the minimum room is 3 by 3.
@@ -51,8 +51,8 @@ Dungeon::Dungeon (int w, int h, unsigned long int s) {
 Dungeon::Dungeon(int w, int h) {
   srand(time(NULL));
   seed = rand();
-  width = ((w <= 0) ? 1 : w);
-  height = ((h <= 0) ? 1 : h);
+  width = ((w <= 30) ? 30 : w);
+  height = ((h <= 30) ? 30 : h);
   buildEmpty();
   int w_trunc = width/3;      // The maximum number of rooms is the product of two floor divisions,
   int h_trunc = height/3;     // since the minimum room is 3 by 3.
@@ -66,7 +66,7 @@ Dungeon::Dungeon(){
   width = 30;
   height = 30;
   buildEmpty();
-  buildDungeon(9, 30, 20);
+  buildDungeon(9, 225, 100);
 }
 
 void Dungeon::outputDungeon(string dungeon_name){
@@ -109,26 +109,26 @@ void Dungeon::buildEmpty(){
 
 // Builds the actual full dungeon from one full of blank tiles.
 void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned short rnum){
-  // Using the seed finally; this guarantees any given seed will generate the same dungeon every time
+  // Using the given seed guarantees it will generate the same dungeon every for the same seed
   srand(Dungeon::seed);
   unsigned short roomMax, roomMin, roomNumMax;
   Subdungeon **rooms;
-  roomMax = rmax; // Maximum room area
-  roomMin = rmin; // Minimum room area
-  roomNumMax = rnum; // Maximum number of rooms that can be placed
+  roomMax = rmax;         // Maximum room area
+  roomMin = rmin;         // Minimum room area
+  roomNumMax = rnum;      // Maximum number of rooms possible
   rooms = new Subdungeon *[roomNumMax];
   
   // Generating list of rooms
   for(int r = 0; r < roomNumMax; r++){
-    int posx = (rand() % (Dungeon::width - 2))+1; //corner can be anywhere except edges
-    int posy = (rand() % (Dungeon::height - 2))+1; //same as above: roomMin should have an int based sqrt function or something equivalent
+    int posx = (rand() % (Dungeon::width - 3))+1;   // corner (horizontal) can be anywhere except edges and 2 units from the right
+    int posy = (rand() % (Dungeon::height - 3))+1;  // corner (vertical) an be anywhere except edges and 2 units from the bottom
     int roomWidth = 0;
     int roomHeight = 0;
-    // This loop continues going until we have a room area between our max and our min.
-    while ((roomWidth*roomHeight < roomMin)  || (roomWidth*roomHeight > roomMax)){ 
+    // Change dimentions of the room until we have a room area between our max and our min.
+    while ((roomWidth*roomHeight < roomMin) || (roomWidth*roomHeight > roomMax)){ 
       roomWidth = (rand()%(Dungeon::width/2) - 3)+3;
       roomHeight = (rand()%(Dungeon::height/2) - 3)+3;
-      // checks if the room goes out of bounds of the dungeon; if so, resizes the room again.
+      // If the room goes out of bounds of the dungeon, then resize the room again.
       if (posx+roomWidth-1 >= Dungeon::width){
         roomWidth = 0;
         continue;
@@ -141,7 +141,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
   }
   
-  // Placing rooms; will just rekey and place a different room if a room fails a test.
+  // Placing rooms; will just re-key and place a different room if a room fails a test.
   // Haven't written yet
   for (int k = 0; k <= roomNumMax; k++){
     
