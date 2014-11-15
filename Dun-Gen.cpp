@@ -130,13 +130,13 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
         int r = rand()%((Dungeon::width/2) - 3 + (width%2))+3;
         roomWidth = r - ((posx+r) - (width-1));
       } else {
-        roomWidth = rand()%((Dungeon::width/2) - 3)+3;
+        roomWidth = rand()%((Dungeon::width/2) - 3 + (width%2))+3;
       }
       if(posy >= (Dungeon::height/2)) {
         int r = rand()%((Dungeon::height/2) - 3 + (height%2))+3;
         roomHeight = r - ((posy+r) - (height-1));
       } else {
-        roomHeight = rand()%((Dungeon::height/2) - 3)+3;
+        roomHeight = rand()%((Dungeon::height/2) - 3 + (height%2))+3;
       }
     }
     rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
