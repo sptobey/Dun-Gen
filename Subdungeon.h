@@ -19,8 +19,8 @@ class Subdungeon {
     unsigned short int key;  //What number each room corresponds to.
 	static unsigned short int total;
 	std::string desc;
-	short unsigned int* boundsx;
-	short unsigned int* boundsy;
+	short unsigned int* boundsTop;
+	short unsigned int* boundsBot;
 	short unsigned int height;
 	short unsigned int width;
 };
@@ -43,12 +43,12 @@ Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w){
 
 void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
   if(s == 0){ //Rectangular room; we may not have time to implement more
-    boundsx = new short unsigned int [2];
-	boundsy = new short unsigned int [2];
-	boundsx[0] = posx;
-	boundsx[1] = posx+w-1;
-	boundsy[0] = posy;
-	boundsy[1] = posy+h-1;
+    boundsTop = new short unsigned int [2];
+	boundsBot = new short unsigned int [2];
+	boundsTop[0] = posx;
+	boundsTop[1] = posx+w-1;
+	boundsBot[0] = posy;
+	boundsBot[1] = posy+h-1;
   }
   else{
     cout << "Invalid shape.";
