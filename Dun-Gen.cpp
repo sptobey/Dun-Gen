@@ -120,22 +120,23 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
   
   // Generating list of rooms
   for(int r = 0; r < roomNumMax; r++){
-    int posx = (rand() % (Dungeon::width - 3))+1;   // corner (horizontal) can be anywhere except edges and 2 units from the right
-    int posy = (rand() % (Dungeon::height - 3))+1;  // corner (vertical) an be anywhere except edges and 2 units from the bottom
+    int posx = (rand() % (Dungeon::width - 4))+1;   // corner (horizontal) can be anywhere except edges and 2 units from the right
+    int posy = (rand() % (Dungeon::height - 4))+1;  // corner (vertical) an be anywhere except edges and 2 units from the bottom
     int roomWidth = 0;
     int roomHeight = 0;
     // Change dimentions of the room until we have a room area between our max and our min.
     while ((roomWidth*roomHeight < roomMin) || (roomWidth*roomHeight > roomMax)){ 
-      roomWidth = (rand()%(Dungeon::width/2) - 3)+3;
-      roomHeight = (rand()%(Dungeon::height/2) - 3)+3;
-      // If the room goes out of bounds of the dungeon, then resize the room again.
-      if (posx+roomWidth-1 >= Dungeon::width){
-        roomWidth = 0;
-        continue;
+      if(posx >= (Dungeon::width/2)) {
+        int r = rand()%((Dungeon::width/2) - 3 + (width%2))+3;
+        roomWidth = r - ((posx+r) - (width-1));
+      } else {
+        roomWidth = rand()%((Dungeon::width/2) - 3)+3;
       }
-      if (posy+roomHeight-1 >= Dungeon::height){
-        roomHeight = 0;
-        continue;
+      if(posy >= (Dungeon::height/2)) {
+        int r = rand()%((Dungeon::height/2) - 3 + (height%2))+3;
+        roomHeight = r - ((posy+r) - (height-1));
+      } else {
+        roomHeight = rand()%((Dungeon::height/2) - 3)+3;
       }
     }
     rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
