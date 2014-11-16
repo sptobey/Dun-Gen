@@ -25,9 +25,10 @@ class Dungeon;
 /* Dungeon class */
 class Dungeon {
 private:
-  short unsigned int** dCont = NULL;
+//  short unsigned int** dCont = NULL;
+  short unsigned int** dCont;
   void buildEmpty();
-  void buildDungeon(unsigned short rax, unsigned short rin, unsigned short rum);
+  void buildDungeon(int rax, int rin, int rum);
 public:
   Dungeon(int w, int h, unsigned long int s);
   Dungeon(int w, int h);
@@ -38,17 +39,21 @@ public:
 };
 // Full Constructor
 Dungeon::Dungeon (int w, int h, unsigned long int s) {
+  cout << " I get into the w,h,s constructor"<<endl;
   seed = s;
   width = ((w <= 30) ? 30 : w);
   height = ((h <= 30) ? 30 : h);
   buildEmpty();
+  cout<< "I made it to the build empty" <<endl;
   int w_trunc = width/3;      // The maximum number of rooms is the product of two floor divisions,
   int h_trunc = height/3;     // since the minimum room is 3 by 3.
   buildDungeon(9, ((width*height)/4), (w_trunc*h_trunc));
+  cout << "I made it past build dungeon"<<endl;
 }
 
 // Constructor w/out Seed
 Dungeon::Dungeon(int w, int h) {
+  
   srand(time(NULL));
   seed = rand();
   width = ((w <= 30) ? 30 : w);
@@ -61,6 +66,7 @@ Dungeon::Dungeon(int w, int h) {
 
 // Default Constructor
 Dungeon::Dungeon(){
+  cout<<"I get to the default constructor";
   srand(time(NULL));
   seed = rand();
   width = 30;
@@ -70,6 +76,7 @@ Dungeon::Dungeon(){
 }
 
 void Dungeon::outputDungeon(string dungeon_name){
+  
   dungeon_name.append(".txt");
   const char* c = dungeon_name.c_str();
   std::ofstream ofs(c);
@@ -96,6 +103,7 @@ void Dungeon::outputDungeon(string dungeon_name){
 
 // Builds a dungeon full of blank tiles
 void Dungeon::buildEmpty(){
+  cout<<"I get to the build empty function"<<endl;
   dCont = new short unsigned int*[height];  //hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
   for(int k = 0; k < height; ++k){
     dCont[k] = new short unsigned int[width];
@@ -108,20 +116,23 @@ void Dungeon::buildEmpty(){
 }
 
 // Builds the actual full dungeon from one full of blank tiles.
-void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned short rnum){
+
+void Dungeon::buildDungeon(int rmin, int rmax, int rnum){
+//void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned short rnum){
+  cout<<"I get to the build dungeon function"<<endl;
   // Using the given seed guarantees it will generate the same dungeon every for the same seed
   srand(Dungeon::seed);
-  unsigned short roomMax, roomMin, roomNumMax;
+  int roomMax, roomMin, roomNumMax;
   Subdungeon **rooms;
   roomMax = rmax;         // Maximum room area
   roomMin = rmin;         // Minimum room area
   roomNumMax = rnum;      // Maximum number of rooms possible
   rooms = new Subdungeon *[roomNumMax];
-  
+  cout << "roomNumMax is : " << roomNumMax;
   // Generating list of rooms
   for(int r = 0; r < roomNumMax; r++){
     int posx = (rand() % (Dungeon::width - 4))+1;   // corner (horizontal) can be anywhere except edges and 2 units from the right
-    int posy = (rand() % (Dungeon::height - 4))+1;  // corner (vertical) an be anywhere except edges and 2 units from the bottom
+    int posy = (rand() % (Dungeon::height - 4))+1;  // corner (vertical) an be anywhere except edges and 2 units from the bottom   
     int roomWidth = 0;
     int roomHeight = 0;
     // Change dimentions of the room until we have a room area between our max and our min.
@@ -139,8 +150,12 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
         roomHeight = rand()%((Dungeon::height/2) - 3 + (height%2))+3;
       }
     }
+        
     rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
+	cout << r<< endl;
+	if(r==100){ cout << "R is at 100 should break here " << endl;}
   }
+  cout << "gets the the room placing part";
   
   // Placing rooms; will just re-key and place a different room if a room fails a test.
   // k is room number
@@ -148,13 +163,13 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 	  // Flag for room overlap
 	  bool roomOverlap = false;
 	  // boundsx[0] in Subdungeon::shapeSize is posx
-	  int posx = rooms[k]->boundsx[0]; 
+	  int posx = rooms[k]->boundsTop[0]; 
 	  // boundsx[1] in Subdungeon::shapeSize is posx + roomWidth-1
-	  int posxEnd = rooms[k]->boundsx[1];
+	  int posxEnd = rooms[k]->boundsTop[1];
 	  // boundsy[0] in Subdungeon::shapeSize is posy
-	  int posy = rooms[k]->boundsy[0]; 
+	  int posy = rooms[k]->boundsBot[0]; 
 	  // boundsy[1] in Subdungeon::shapeSize is posy + roomHeight-1
-	  int posyEnd = rooms[k]->boundsy[1];
+	  int posyEnd = rooms[k]->boundsBot[1];
 	  
 	  // Before placing room, check if room will overlap with any other room in Dungeon	 
 	   
@@ -214,10 +229,21 @@ int main() {
   
   unsigned long int s;
   int w,h;
+//  string n;
   string n;
-  std::cout<<"Please enter a width, a height, a seed, and a name:"<<std::endl;
-  std::cin>> w >> h >> s >> n;
+//  std::cout<<"Please enter a width, a height, a seed, and a name:"<<std::endl;
+  
+  cout<<"please enter the width and height"<<endl;
+  std::cin>> w >> h;
+  cout<<"please enter the seed"<<endl;
+  cin>> s;
+  cout<< s <<endl;
+  cout<<"please enter the name of the file the dungeon will be output to"<<endl;
+  cin>> n;
+//  cout<< n << "why is this breaking here " << endl;
+  cout<<"I get to the right before the constructor"<< endl;
   Dungeon my_dungeon = Dungeon(w,h,s);
+  cout << "I get past the constructor"<<endl;
   my_dungeon.outputDungeon(n);
   
   return 0;
