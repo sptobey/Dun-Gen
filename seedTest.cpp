@@ -1,5 +1,5 @@
 // Example program showing that seeding works consistently
-#include <iostream>
+//#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

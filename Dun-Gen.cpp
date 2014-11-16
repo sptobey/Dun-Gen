@@ -152,7 +152,8 @@ void Dungeon::buildDungeon(int rmin, int rmax, int rnum){
     }
         
     rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
-	cout << r<< endl;
+	cout << "rooms ["<<r<<"]"<<endl;
+//	cout << r<< endl;
 	if(r==100){ cout << "R is at 100 should break here " << endl;}
   }
   cout << "gets the the room placing part";
