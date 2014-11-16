@@ -148,13 +148,15 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 	  // Flag for room overlap
 	  bool roomOverlap = false;
 	  // boundsx[0] in Subdungeon::shapeSize is posx
-	  int posx = rooms[k]->boundsx[0]; 
+	  // name changed to match name change in Subdungeon, now boundsTop
+	  int posx = rooms[k]->boundsTop[0]; 
 	  // boundsx[1] in Subdungeon::shapeSize is posx + roomWidth-1
-	  int posxEnd = rooms[k]->boundsx[1];
+	  int posxEnd = rooms[k]->boundsTop[1];
 	  // boundsy[0] in Subdungeon::shapeSize is posy
-	  int posy = rooms[k]->boundsy[0]; 
+	  // name changed to match name change in Subdungeon, now boundsBot
+	  int posy = rooms[k]->boundsBot[0]; 
 	  // boundsy[1] in Subdungeon::shapeSize is posy + roomHeight-1
-	  int posyEnd = rooms[k]->boundsy[1];
+	  int posyEnd = rooms[k]->boundsBot[1];
 	  
 	  // Before placing room, check if room will overlap with any other room in Dungeon	 
 	   
@@ -179,10 +181,10 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 				  dCont[i][j] = FLOOR;
 				  // Place wall on outer edges of room
 				  // Left and right end column walls first
-				  dCont[i][0] = WALL;
+				  dCont[i][posy] = WALL;
 				  dCont[i][posyEnd] = WALL;
 				  // Bottom and top row walls next
-				  dCont[0][j] = WALL;
+				  dCont[posx][j] = WALL;
 				  dCont[posxEnd][j] = WALL;
 			  }
 		  }
