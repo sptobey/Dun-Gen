@@ -143,10 +143,51 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
   }
   
   // Placing rooms; will just re-key and place a different room if a room fails a test.
-  // Haven't written yet
-  for (int k = 0; k <= roomNumMax; k++){
-    
-  }
+  // k is room number
+  for (int k = 0; k < roomNumMax; ++k){
+	  // Flag for room overlap
+	  bool roomOverlap = false;
+	  // boundsx[0] in Subdungeon::shapeSize is posx
+	  int posx = rooms[k]->boundsx[0]; 
+	  // boundsx[1] in Subdungeon::shapeSize is posx + roomWidth-1
+	  int posxEnd = rooms[k]->boundsx[1];
+	  // boundsy[0] in Subdungeon::shapeSize is posy
+	  int posy = rooms[k]->boundsy[0]; 
+	  // boundsy[1] in Subdungeon::shapeSize is posy + roomHeight-1
+	  int posyEnd = rooms[k]->boundsy[1];
+	  
+	  // Before placing room, check if room will overlap with any other room in Dungeon	 
+	   
+	  // Dungeon::buildEmpty convention that i associated with height, j with width
+	  // Check every x,y position in potential room location by nested loops
+	  for (int j = posx; j < posxEnd; ++j){
+		  for (int i = posy; i < posyEnd; ++i){
+			  // Check if each space is blank, if not, then room overlap
+			  if (dCont[i][j] != BLANK){
+				  roomOverlap = true;
+				  //set i, j to break out of loop
+				  j = posxEnd;
+				  i = posyEnd;
+			  }
+		  }
+	  }
+	  // Place room if no overlap
+	  if (!roomOverlap){
+		  // Do nested loops again to label each space FLOOR
+		  for (int j = posx; j < posxEnd; ++j){
+			  for (int i = posy; i < posyEnd; ++i){
+				  dCont[i][j] = FLOOR;
+				  // Place wall on outer edges of room
+				  // Left and right end column walls first
+				  dCont[i][0] = WALL;
+				  dCont[i][posyEnd] = WALL;
+				  // Bottom and top row walls next
+				  dCont[0][j] = WALL;
+				  dCont[posxEnd][j] = WALL;
+			  }
+		  }
+	  }
+  } 
 
 // Place walls on the edges of the dungeon
   for(int i = 0; i < height; i++){
