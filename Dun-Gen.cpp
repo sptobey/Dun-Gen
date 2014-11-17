@@ -139,57 +139,52 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
         roomHeight = rand()%((Dungeon::height/2) - 3 + (height%2))+3;
       }
     }
-    rooms[r] = new Subdungeon(0, posx, posy, roomWidth, roomHeight);
+    rooms[r] = new Subdungeon(0, posx, posy, roomHeight, roomWidth);
   }
   
   // Placing rooms; will just re-key and place a different room if a room fails a test.
-  // k is room number
   for (int k = 0; k < roomNumMax; ++k){
-	  // Flag for room overlap
-	  bool roomOverlap = false;
-	  // boundsx[0] in Subdungeon::shapeSize is posx
-	  // name changed to match name change in Subdungeon, now boundsTop
-	  int posx = rooms[k]->boundsTop[0]; 
-	  // boundsx[1] in Subdungeon::shapeSize is posx + roomWidth-1
-	  int posxEnd = rooms[k]->boundsTop[1];
-	  // boundsy[0] in Subdungeon::shapeSize is posy
-	  // name changed to match name change in Subdungeon, now boundsBot
-	  int posy = rooms[k]->boundsBot[0]; 
-	  // boundsy[1] in Subdungeon::shapeSize is posy + roomHeight-1
-	  int posyEnd = rooms[k]->boundsBot[1];
-	  
-	  // Before placing room, check if room will overlap with any other room in Dungeon	 
-	   
-	  // Dungeon::buildEmpty convention that i associated with height, j with width
-	  // Check every x,y position in potential room location by nested loops
-	  for (int j = posx; j < posxEnd; ++j){
-		  for (int i = posy; i < posyEnd; ++i){
-			  // Check if each space is blank, if not, then room overlap
-			  if (dCont[i][j] != BLANK){
-				  roomOverlap = true;
-				  //set i, j to break out of loop
-				  j = posxEnd;
-				  i = posyEnd;
-			  }
-		  }
-	  }
-	  // Place room if no overlap
-	  if (!roomOverlap){
-		  // Do nested loops again to label each space FLOOR
-		  for (int j = posx; j < posxEnd; ++j){
-			  for (int i = posy; i < posyEnd; ++i){
-				  dCont[i][j] = FLOOR;
-				  // Place wall on outer edges of room
-				  // Left and right end column walls first
-				  dCont[i][posy] = WALL;
-				  dCont[i][posyEnd] = WALL;
-				  // Bottom and top row walls next
-				  dCont[posx][j] = WALL;
-				  dCont[posxEnd][j] = WALL;
-			  }
-		  }
-	  }
-  } 
+    bool roomOverlap = false;
+    int posx = rooms[k]->boundsTop[0]; 
+    int posxEnd = rooms[k]->boundsTop[1];
+    int posy = rooms[k]->boundsBot[0]; 
+    int posyEnd = rooms[k]->boundsBot[1];
+    
+    // Before placing room, check if room will overlap with any other room in Dungeon   
+     
+    // Dungeon::buildEmpty convention that i associated with height, j with width
+    // Check every x,y position in potential room location by nested loops
+    for (int i = posy; i <= posyEnd; ++i){
+      for (int j = posx; j <= posxEnd; ++j){
+        // Check if each space is blank, if not, then room overlap
+        if (dCont[i][j] != BLANK){
+          roomOverlap = true;
+          //set i, j to break out of loop
+          j = posxEnd;
+          i = posyEnd;
+        }
+      }
+    }
+    // Place room if no overlap
+    if (!roomOverlap){
+      // Floor
+      for (int i = (posy+1); i <= (posyEnd-1); ++i){
+        for (int j = (posx+1); j <= (posxEnd-1); ++j){
+          dCont[i][j] = FLOOR;
+        }
+      }
+      // Left and Right Walls
+      for (int i = posy; i <= posyEnd; ++i) {
+        dCont[i][posx   ] = WALL;
+        dCont[i][posxEnd] = WALL;
+      }
+      // Bottom and Top Walls
+      for (int j = posx; j <= posxEnd; ++j) {
+        dCont[posy   ][j] = WALL;
+        dCont[posyEnd][j] = WALL;
+      }
+    }
+  }
 
 // Place walls on the edges of the dungeon
   for(int i = 0; i < height; i++){
