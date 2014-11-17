@@ -13,16 +13,16 @@ using namespace std;
 class Subdungeon {
   private:
     void shapeSize(int s, int posx, int posy, int h, int w);
-	void randDescribe();
+    void randDescribe();
   public:
     Subdungeon(int shape, int posx, int posy, int h, int w);
     unsigned short int key;  //What number each room corresponds to.
-	static unsigned short int total;
-	std::string desc;
-	short unsigned int* boundsTop;
-	short unsigned int* boundsBot;
-	short unsigned int height;
-	short unsigned int width;
+    static unsigned short int total;
+    std::string desc;
+    short unsigned int* boundsTop;
+    short unsigned int* boundsBot;
+    short unsigned int height;
+    short unsigned int width;
 };
 
 unsigned short int Subdungeon::total = 0;
@@ -35,20 +35,20 @@ unsigned short int Subdungeon::total = 0;
 Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w){
   total++;
   key = total;
-  shapeSize(shape, posx, posy, h, w);
   height = h;
   width = w;
+  shapeSize(shape, posx, posy, h, w);
   randDescribe();
 }
 
 void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
   if(s == 0){ //Rectangular room; we may not have time to implement more
     boundsTop = new short unsigned int [2];
-	boundsBot = new short unsigned int [2];
-	boundsTop[0] = posx;
-	boundsTop[1] = posx+w-1;
-	boundsBot[0] = posy;
-	boundsBot[1] = posy+h-1;
+    boundsBot = new short unsigned int [2];
+    boundsTop[0] = posx;
+    boundsTop[1] = posx+w-1;
+    boundsBot[0] = posy;
+    boundsBot[1] = posy+h-1;
   }
   else{
     cout << "Invalid shape.";
