@@ -12,6 +12,7 @@
 #include <string>
 #include <sstream>
 #include "Subdungeon.h"
+#include <istream>
 
 #define BLANK 0
 #define FLOOR 1
@@ -25,7 +26,7 @@ class Dungeon;
 /* Dungeon class */
 class Dungeon {
 private:
-  short unsigned int** dCont = NULL;
+  short unsigned int** dCont;
   void buildEmpty();
   void buildDungeon(unsigned short rax, unsigned short rin, unsigned short rum);
 public:
@@ -35,6 +36,7 @@ public:
   unsigned long int seed;
   int height, width;
   void outputDungeon(std::string name);
+  void printDungeon(string fileName);
 };
 // Full Constructor
 Dungeon::Dungeon (int w, int h, unsigned long int s) {
@@ -94,6 +96,8 @@ void Dungeon::outputDungeon(string dungeon_name){
   ofs.close();
 }
 
+
+
 // Builds a dungeon full of blank tiles
 void Dungeon::buildEmpty(){
   dCont = new short unsigned int*[height];  //hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
@@ -106,6 +110,15 @@ void Dungeon::buildEmpty(){
     }
   }
 }
+
+void Dungeon::printDungeon(string fileName){
+  ifstream dungeonOutput;
+  fileName.append(".txt"); 
+  dungeonOutput.open(fileName.c_str());
+  cout << dungeonOutput.rdbuf();
+  }
+  
+
 
 // Builds the actual full dungeon from one full of blank tiles.
 void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned short rnum){
@@ -212,10 +225,18 @@ int main() {
   unsigned long int s;
   int w,h;
   string n;
+  string yes_no;
   std::cout<<"Please enter a width, a height, a seed, and a name:"<<std::endl;
   std::cin>> w >> h >> s >> n;
   Dungeon my_dungeon = Dungeon(w,h,s);
   my_dungeon.outputDungeon(n);
   
+  cout<<"Would you like to see the dungeon now? (yes or no)"<<endl<<endl;
+  cin>> yes_no;
+  if(yes_no == "yes" or yes_no == "Yes")
+  {
+	my_dungeon.printDungeon(n);
+  }
+    
   return 0;
 }
