@@ -8,4 +8,4 @@ Dun-Gen: Dun-Gen.o
 Dun-Gen.o: 
 	g++ -c -Wall Dun-Gen.cpp -o Dun-Gen.o
 clean:
-	@rm -f *.o
+	@rm -f *.o *.txt
