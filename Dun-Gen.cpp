@@ -5,6 +5,7 @@
  * Philip Rowe
  */
 #include <fstream>
+#include <istream>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +13,6 @@
 #include <string>
 #include <sstream>
 #include "Subdungeon.h"
-#include <istream>
 
 #define BLANK 0
 #define FLOOR 1
@@ -96,8 +96,6 @@ void Dungeon::outputDungeon(string dungeon_name){
   ofs.close();
 }
 
-
-
 // Builds a dungeon full of blank tiles
 void Dungeon::buildEmpty(){
   dCont = new short unsigned int*[height];  //hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
@@ -116,9 +114,8 @@ void Dungeon::printDungeon(string fileName){
   fileName.append(".txt"); 
   dungeonOutput.open(fileName.c_str());
   cout << dungeonOutput.rdbuf();
+  dungeonOutput.close();
   }
-  
-
 
 // Builds the actual full dungeon from one full of blank tiles.
 void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned short rnum){
@@ -208,10 +205,6 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     dCont[0][j] = WALL;
     dCont[height-1][j] = WALL;
   }
-  
-  
-  
-  
 
   /* Pathfinding algorithm here maybe?  Set it up how you want.
   // Maybe should take args for options?  Still thinking this one out.*/
@@ -231,11 +224,11 @@ int main() {
   Dungeon my_dungeon = Dungeon(w,h,s);
   my_dungeon.outputDungeon(n);
   
-  cout<<"Would you like to see the dungeon now? (yes or no)"<<endl<<endl;
+  cout<<"Would you like to see the dungeon now? (yes or no)"<<endl;
   cin>> yes_no;
   if(yes_no == "yes" or yes_no == "Yes")
   {
-	my_dungeon.printDungeon(n);
+    my_dungeon.printDungeon(n);
   }
     
   return 0;
