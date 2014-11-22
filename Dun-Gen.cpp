@@ -212,6 +212,19 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 
 /* End Dungeon class */
 
+/*!
+ * @mainpage Project Dun-Gen
+ * homepage in Doxygen documentation
+ * 
+ * @brief Takes user inputs for width, height, seed, and name
+ * and creates a dungeon. Also takes user input for printing dungeon.
+ * @param w width for dungeon
+ * @param h height for dungeon
+ * @param s seed for dungeon
+ * @param n name for dungeon
+ * @param yes to print dungeon
+ * @param no not print dungeon
+ */
 
 int main() {
   
