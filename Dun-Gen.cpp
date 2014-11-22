@@ -23,7 +23,7 @@ using namespace std;
 class Dungeon;
 
 
-/* Dungeon class */
+/*! Dungeon class */
 class Dungeon {
 private:
   short unsigned int** dCont;
@@ -38,7 +38,13 @@ public:
   void outputDungeon(std::string name);
   void printDungeon(string fileName);
 };
-// Full Constructor
+/*
+ * @brief Full Constructor
+ * 
+ * @param w width of dungeon
+ * @param h height of dungeon
+ * @param s seed
+ */
 Dungeon::Dungeon (int w, int h, unsigned long int s) {
   seed = s;
   width = ((w <= 30) ? 30 : w);
@@ -49,7 +55,12 @@ Dungeon::Dungeon (int w, int h, unsigned long int s) {
   buildDungeon(9, ((width*height)/4), (w_trunc*h_trunc));
 }
 
-// Constructor w/out Seed
+/*
+ * @brief Constructor w/out Seed
+ * 
+ * @param w width of dungeon
+ * @param h height of dungeon
+ */
 Dungeon::Dungeon(int w, int h) {
   srand(time(NULL));
   seed = rand();
@@ -61,7 +72,9 @@ Dungeon::Dungeon(int w, int h) {
   buildDungeon(9, ((width*height)/4), (w_trunc*h_trunc));
 }
 
-// Default Constructor
+/* 
+ * @brief Default Constructor
+ */
 Dungeon::Dungeon(){
   srand(time(NULL));
   seed = rand();
@@ -96,9 +109,11 @@ void Dungeon::outputDungeon(string dungeon_name){
   ofs.close();
 }
 
-// Builds a dungeon full of blank tiles
+/*! 
+ * @brief Builds a dungeon full of blank tiles
+ */
 void Dungeon::buildEmpty(){
-  dCont = new short unsigned int*[height];  //hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
+  dCont = new short unsigned int*[height];  //! hooray! Pointers.  Note that this isn't actually deleted anywhere yet.
   for(int k = 0; k < height; ++k){
     dCont[k] = new short unsigned int[width];
   }
@@ -117,24 +132,24 @@ void Dungeon::printDungeon(string fileName){
   dungeonOutput.close();
   }
 
-// Builds the actual full dungeon from one full of blank tiles.
+//! Builds the actual full dungeon from one full of blank tiles.
 void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned short rnum){
-  // Using the given seed guarantees it will generate the same dungeon every for the same seed
+  //! Using the given seed guarantees it will generate the same dungeon every for the same seed
   srand(Dungeon::seed);
   unsigned short roomMax, roomMin, roomNumMax;
   Subdungeon **rooms;
-  roomMax = rmax;         // Maximum room area
-  roomMin = rmin;         // Minimum room area
-  roomNumMax = rnum;      // Maximum number of rooms possible
+  roomMax = rmax;         //! Maximum room area
+  roomMin = rmin;         //! Minimum room area
+  roomNumMax = rnum;      //! Maximum number of rooms possible
   rooms = new Subdungeon *[roomNumMax];
   
-  // Generating list of rooms
+  //! Generating list of rooms
   for(int r = 0; r < roomNumMax; r++){
-    int posx = (rand() % (Dungeon::width - 4))+1;   // corner (horizontal) can be anywhere except edges and 2 units from the right
-    int posy = (rand() % (Dungeon::height - 4))+1;  // corner (vertical) an be anywhere except edges and 2 units from the bottom
+    int posx = (rand() % (Dungeon::width - 4))+1;   //! corner (horizontal) can be anywhere except edges and 2 units from the right
+    int posy = (rand() % (Dungeon::height - 4))+1;  //! corner (vertical) an be anywhere except edges and 2 units from the bottom
     int roomWidth = 0;
     int roomHeight = 0;
-    // Change dimentions of the room until we have a room area between our max and our min.
+    //! Change dimentions of the room until we have a room area between our max and our min.
     while ((roomWidth*roomHeight < roomMin) || (roomWidth*roomHeight > roomMax)){ 
       if(posx >= (Dungeon::width/2)) {
         int r = rand()%((Dungeon::width/2) - 3 + (width%2))+3;
@@ -163,7 +178,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     /*! 
      * Before placing room, check if room will overlap with any other room in Dungeon 
      * 
-     * Dungeon::buildEmpty convention that i associated with height, j with width
+     * using Dungeon::buildEmpty convention that i associated with height, j with width
      * Check every x,y position in potential room location by nested loops
      */
     for (int i = posy; i <= posyEnd; ++i){
@@ -198,7 +213,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     }
   }
 
-// Place walls on the edges of the dungeon
+//! Place walls on the edges of the dungeon
   for(int i = 0; i < height; i++){
     dCont[i][0] = WALL;
     dCont[i][width-1]= WALL;
@@ -208,11 +223,13 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     dCont[height-1][j] = WALL;
   }
 
-  /* Pathfinding algorithm here maybe?  Set it up how you want.
-  // Maybe should take args for options?  Still thinking this one out.*/
+  /*! 
+   * Pathfinding algorithm here maybe?  Set it up how you want.
+   *  Maybe should take args for options?  Still thinking this one out.
+   */
 }
 
-/* End Dungeon class */
+/*! End Dungeon class */
 
 /*!
  * @mainpage Project Dun-Gen
@@ -225,7 +242,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
  * @param s seed for dungeon
  * @param n name for dungeon
  * @param yes to print dungeon
- * @param no not print dungeon
+ * @param no to not print dungeon
  */
 
 int main() {
