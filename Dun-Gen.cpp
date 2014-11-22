@@ -152,7 +152,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     rooms[r] = new Subdungeon(0, posx, posy, roomHeight, roomWidth);
   }
   
-  // Placing rooms; will just re-key and place a different room if a room fails a test.
+  //! Placing rooms; will just re-key and place a different room if a room fails a test.
   for (int k = 0; k < roomNumMax; ++k){
     bool roomOverlap = false;
     int posx = rooms[k]->boundsTop[0]; 
@@ -160,35 +160,37 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     int posy = rooms[k]->boundsBot[0]; 
     int posyEnd = rooms[k]->boundsBot[1];
     
-    // Before placing room, check if room will overlap with any other room in Dungeon   
-     
-    // Dungeon::buildEmpty convention that i associated with height, j with width
-    // Check every x,y position in potential room location by nested loops
+    /*! 
+     * Before placing room, check if room will overlap with any other room in Dungeon 
+     * 
+     * Dungeon::buildEmpty convention that i associated with height, j with width
+     * Check every x,y position in potential room location by nested loops
+     */
     for (int i = posy; i <= posyEnd; ++i){
       for (int j = posx; j <= posxEnd; ++j){
-        // Check if each space is blank, if not, then room overlap
+        //! Check if each space is blank, if not, then room overlap
         if (dCont[i][j] != BLANK){
           roomOverlap = true;
-          //set i, j to break out of loop
+          //! Set i, j to break out of loop
           j = posxEnd;
           i = posyEnd;
         }
       }
     }
-    // Place room if no overlap
+    //! Place room if no overlap
     if (!roomOverlap){
-      // Floor
+      //! Floor
       for (int i = (posy+1); i <= (posyEnd-1); ++i){
         for (int j = (posx+1); j <= (posxEnd-1); ++j){
           dCont[i][j] = FLOOR;
         }
       }
-      // Left and Right Walls
+      //! Left and Right Walls
       for (int i = posy; i <= posyEnd; ++i) {
         dCont[i][posx   ] = WALL;
         dCont[i][posxEnd] = WALL;
       }
-      // Bottom and Top Walls
+      //! Bottom and Top Walls
       for (int j = posx; j <= posxEnd; ++j) {
         dCont[posy   ][j] = WALL;
         dCont[posyEnd][j] = WALL;
