@@ -5,8 +5,8 @@
 #include <string>
 #include <sstream>
 
-/* Begin Subdungeon class */
-// This is a designator laid out on rooms, complete with number, position, etc.
+/*! Begin Subdungeon class */
+//! This is a designator laid out on rooms, complete with number, position, etc.
 
 using namespace std;
 
@@ -27,11 +27,19 @@ class Subdungeon {
 
 unsigned short int Subdungeon::total = 0;
 
-/* Subdungeon constructor, shape is room shape designator (rectangles, right triangles, 
-// equalaterial triangles, etc)
-// posx and posy are coordinates for corner closest to 0 on both scales for rectangles
-// will be different for other room shapes, particularly hexagons 
-// desc is room description, which should be created by a function. */
+/*! 
+ * @brief Subdungeon constructor
+ * 
+ * @param posx x coordinate for corner closest to 0 for rectangle
+ * @param posy y coordinate for corner closest to 0 for rectangle
+ * @param h height for subdungeon
+ * @param w width for subdungeon
+ * @param shape room shape designator (rectangles, right triangles, 
+ * equalaterial triangles, etc)
+ * 
+ * will be different for other room shapes, particularly hexagons 
+ * desc is room description, which should be created by a function.
+ */
 Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w){
   total++;
   key = total;
@@ -40,9 +48,21 @@ Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w){
   shapeSize(shape, posx, posy, h, w);
   randDescribe();
 }
-
+/*! 
+ * @brief Subdungeon shape size constructor
+ * 
+ * @param posx x coordinate for corner closest to 0 for rectangle
+ * @param posy y coordinate for corner closest to 0 for rectangle
+ * @param h height for subdungeon
+ * @param w width for subdungeon
+ * @param s room shape designator (rectangles, right triangles, 
+ * equalaterial triangles, etc)
+ * 
+ * will be different for other room shapes, particularly hexagons 
+ * desc is room description, which should be created by a function.
+ */
 void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
-  if(s == 0){ //Rectangular room; we may not have time to implement more
+  if(s == 0){ //! Rectangular room; we may not have time to implement more
     boundsTop = new short unsigned int [2];
     boundsBot = new short unsigned int [2];
     boundsTop[0] = posx;
@@ -54,8 +74,13 @@ void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
     cout << "Invalid shape.";
   }
 }
-
-void Subdungeon::randDescribe(){  //More might be added to this later
+/*! 
+ * @brief Subdungeon output description
+ * 
+ * @param x width in feet
+ * @param y height in feet
+ */
+void Subdungeon::randDescribe(){  //! More might be added to this later
   stringstream x;
   stringstream y;
   x << Subdungeon::width-2;
@@ -74,4 +99,4 @@ void Subdungeon::randDescribe(){  //More might be added to this later
 
 
 
-/* End Subdungeon class */
+/*! End Subdungeon class */
