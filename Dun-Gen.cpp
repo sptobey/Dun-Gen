@@ -23,7 +23,7 @@
 #define WALL 2
 #define PATH 8
 #define DOOR 6
-
+#define STUCK 7
 using namespace std;
 
 class Dungeon;
@@ -247,9 +247,9 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 		int doory = iterator->boundsBot[0]+(iterator->boundsBot[1]-iterator->boundsBot[0])/2;
 		//int midx = iterator->
 		int doorx = iterator->boundsTop[0];
-		dCont[doory][doorx]= DOOR;
 		dCont[doory][doorx-1]= PATH;
 		doorx = doorx-1;
+		
 		//if(oldDungeon
 		
 		if (iterator != roomList.begin()){
@@ -258,7 +258,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 			cout << oldDungeon.boundsBot[0]  <<endl;
 			
 			int destinationDoory = oldDungeon.boundsBot[0]+(oldDungeon.boundsBot[1]-oldDungeon.boundsBot[0])/2;
-			int destinationDoorx = oldDungeon.boundsTop[0];
+			int destinationDoorx = oldDungeon.boundsTop[0]-1;
 		//	cout << "the destination is: "<< destinationDoory << destinationDoorx << endl;
 			
 			
@@ -270,7 +270,10 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 			//while(doory!=destinationDoory && doorx != destinationDoorx-1){
 				
 			int i = 0;
-			while((doory!=destinationDoory || doorx != destinationDoorx) && i<100){
+			// && i<100
+			//changing to a do while loop
+			do
+			{
 				
 				if(doory > destinationDoory && dCont[doory-1][doorx]!=WALL && dCont[doory-1][doorx]!=DOOR){
 						dCont[doory-1][doorx]= PATH;
@@ -293,11 +296,64 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 						dCont[doory][doorx-1]= PATH;
 						doorx = doorx -1;
 					}
-			i++;
-			//if(i%10==0){cout<<destinationDoorx << destinationDoory<< endl;}
+					
+			//checks for getting stuck
+			//going up
+				if(doorx == destinationDoorx and doory<destinationDoory and dCont[doory+1][doorx]==WALL){
+					while(dCont[doory+1][doorx]==WALL)
+					{
+						dCont[doory][doorx-1]= PATH;
+						doorx = doorx -1;
+					}
+					dCont[doory+1][doorx]=PATH;
+					doory = doory+1;
+					}
+			//going down
+				if(doorx == destinationDoorx and doory>destinationDoory and dCont[doory-1][doorx]==WALL){
+					while(dCont[doory-1][doorx]==WALL)
+					{
+						dCont[doory][doorx-1]= PATH;
+						doorx = doorx -1;
+					}
+					dCont[doory-1][doorx]=PATH;
+					doory = doory-1;
+					}
+			//going right
+				if(doory == destinationDoory and doorx<destinationDoorx and dCont[doory][doorx+1]==WALL){
+					while(dCont[doory][doorx+1]==WALL)
+					{
+						dCont[doory+1][doorx]= PATH;
+						doory = doory +1;
+					}
+					dCont[doory][doorx+1]=PATH;
+					doorx = doorx+1;
+					}
 			
-			oldDungeon = *iterator;
+			//going left
+				if(doory == destinationDoory and doorx>destinationDoorx and dCont[doory][doorx-1]==WALL){
+					while(dCont[doory][doorx-1]==WALL)
+					{
+						dCont[doory+1][doorx]= PATH;
+						doory = doory +1;
+					}
+					dCont[doory][doorx-1]=PATH;
+					doorx = doorx-1;
+					}
+			
+			i++;
+			if(doory==destinationDoory and doorx == destinationDoorx) {cout<<"bingo"<<endl;}
+			
+			
+			
+			if(i>50&&i%9==0){cout << "door x is :" << doorx << " destination door x is :"<< destinationDoorx << endl; 
+				dCont[doory][doorx]=STUCK;
 			}
+			
+			}
+			while((doory!=destinationDoory || doorx != destinationDoorx)&& i<100 );
+			//&& i<100 
+			dCont[doory][doorx+1]= DOOR;
+			oldDungeon = *iterator;
 			
 			
 			//while(doory > destinationDoory && dCont[doory][doorx-1]!=WALL){
@@ -322,9 +378,6 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
 						//dCont[doory][doorx-1]= PATH;
 						//doory = doory +1;
 					//}
-			
-			
-			
 			
 			}
 	//	}
