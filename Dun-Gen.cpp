@@ -1,4 +1,4 @@
-/* Dun-Gen.cpp
+/*! Dun-Gen.cpp
  * Christopher Audette,
  * Samuel P. Tobey,
  * David Bittle,
@@ -38,7 +38,7 @@ public:
   void outputDungeon(std::string name);
   void printDungeon(string fileName);
 };
-/*
+/*!
  * @brief Full Constructor
  * 
  * @param w width of dungeon
@@ -55,7 +55,7 @@ Dungeon::Dungeon (int w, int h, unsigned long int s) {
   buildDungeon(9, ((width*height)/4), (w_trunc*h_trunc));
 }
 
-/*
+/*!
  * @brief Constructor w/out Seed
  * 
  * @param w width of dungeon
@@ -72,7 +72,7 @@ Dungeon::Dungeon(int w, int h) {
   buildDungeon(9, ((width*height)/4), (w_trunc*h_trunc));
 }
 
-/* 
+/*! 
  * @brief Default Constructor
  */
 Dungeon::Dungeon(){
