@@ -184,7 +184,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
         roomHeight = rand()%((Dungeon::height/2) - 3 + (height%2))+3;
       }
     }
-    rooms[r] = new Subdungeon(0, posx, posy, roomHeight, roomWidth);
+    rooms[r] = new Subdungeon(0, posx, posy, roomHeight, roomWidth, Dungeon::seed);
   }
   
   //! Placing rooms; will just re-key and place a different room if a room fails a test.
