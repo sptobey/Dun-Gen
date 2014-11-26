@@ -34,6 +34,7 @@ private:
   short unsigned int** dCont;
   void buildEmpty();
   void buildDungeon(unsigned short rax, unsigned short rin, unsigned short rum);
+  void generatePath();
 public:
   Dungeon(int w, int h, unsigned long int s);
   Dungeon(int w, int h);
@@ -227,181 +228,8 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     }
   }
 
-
-Subdungeon oldDungeon = *roomList.begin(); 
-for (list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end(); iterator != end; ++iterator) {
-  //  if(startRoom != NULL)
-		int doory = iterator->boundsBot[0]+(iterator->boundsBot[1]-iterator->boundsBot[0])/2;
-		//int midx = iterator->
-		//int doorx = iterator->boundsTop[0];
-		//dCont[doory][doorx-1]= PATH;
-		//doorx = doorx-1;
-		int doorx;
-		
-		if(iterator->boundsTop[0] == 1)
-			{
-			doorx = iterator->boundsTop[1];
-			dCont[doory][doorx+1]= PATH;
-			doorx = doorx+1;
-			}
-		else{
-			doorx = iterator->boundsTop[0];
-			dCont[doory][doorx-1]= PATH;
-			doorx = doorx-1;
-			}
-		
-		
-		
-		
-		
-		
-		//if(oldDungeon
-		
-		if (iterator != roomList.begin()){
-			
-			//Subdungeon oldDungeon = roomList.back();
-			//cout << oldDungeon.boundsBot[0]  <<endl;
-			
-			int destinationDoory = oldDungeon.boundsBot[0]+(oldDungeon.boundsBot[1]-oldDungeon.boundsBot[0])/2;
-			int destinationDoorx = oldDungeon.boundsTop[0]-1;
-		//	cout << "the destination is: "<< destinationDoory << destinationDoorx << endl;
-			
-			
-	//		cout << "the doors location is " << doorx << endl;
-	//		cout << "the destinations is " << destinationDoorx << endl;	
-			
-
-			//basic path finding stuff		
-			//while(doory!=destinationDoory && doorx != destinationDoorx-1){
-			
-		
-			int i = 0;
-			// && i<100
-			//changing to a do while loop
-			do
-			{		
-				if(doory > destinationDoory && dCont[doory-1][doorx]!=WALL && dCont[doory-1][doorx]!=DOOR){
-						dCont[doory-1][doorx]= PATH;
-						doory = doory -1;
-	
-					}
-				
-				if(doory < destinationDoory && dCont[doory+1][doorx]!=WALL && dCont[doory+1][doorx]!=DOOR){
-						dCont[doory+1][doorx]= PATH;
-						doory = doory +1;
-					}
-			
-			// && dCont[doory][doorx-1]!=WALL
-				if(doorx < destinationDoorx  && dCont[doory][doorx+1]!=WALL && dCont[doory][doorx+1]!=DOOR){
-							dCont[doory][doorx+1]= PATH;
-							doorx = doorx +1;
-					}
-				if(doorx > destinationDoorx && dCont[doory][doorx-1]!=WALL  && dCont[doory][doorx-1]!=DOOR){
-	
-						dCont[doory][doorx-1]= PATH;
-						doorx = doorx -1;
-					}
-					
-					
-					
-					
-			//checks for getting stuck
-			//going up
-				if(doorx == destinationDoorx and doory<destinationDoory and dCont[doory+1][doorx]==WALL){
-					while(dCont[doory+1][doorx]==WALL)
-					{
-						dCont[doory][doorx-1]= PATH;
-						doorx = doorx -1;
-					}
-					dCont[doory+1][doorx]=PATH;
-					doory = doory+1;
-					}
-			//going down
-				if(doorx == destinationDoorx and doory>destinationDoory and dCont[doory-1][doorx]==WALL){
-					while(dCont[doory-1][doorx]==WALL)
-					{
-						dCont[doory][doorx-1]= PATH;
-						doorx = doorx -1;
-					}
-					dCont[doory-1][doorx]=PATH;
-					doory = doory-1;
-					}
-			//going right
-				if(doory == destinationDoory and doorx<destinationDoorx and dCont[doory][doorx+1]==WALL){
-					if(doory>(height/2)){
-						while(dCont[doory][doorx+1]==WALL)
-						{
-							dCont[doory-1][doorx]= PATH;
-							doory = doory -1;
-						}
-					}
-					else{
-						while(dCont[doory][doorx+1]==WALL)
-						{
-							dCont[doory+1][doorx]= PATH;
-							doory = doory+1;
-						}
-					}
-					
-					dCont[doory][doorx+1]=PATH;
-					doorx = doorx+1;
-					}
-			
-			//going left
-				if(doory == destinationDoory and doorx>destinationDoorx and dCont[doory][doorx-1]==WALL){
-					if(doory>(height/2)){
-						while(dCont[doory][doorx-1]==WALL)
-						{
-							dCont[doory-1][doorx]= PATH;
-							doory = doory -1;
-						}
-					}
-					else{
-						while(dCont[doory][doorx-1]==WALL)
-						{
-							dCont[doory+1][doorx]= PATH;
-							doory = doory +1;
-						}
-					}
-					dCont[doory][doorx-1]=PATH;
-					doorx = doorx-1;
-					}
-			
-			i++;
-			//if(doory==destinationDoory and doorx == destinationDoorx) {cout<<"bingo"<<endl;}
-			
-			
-			
-			if(i>50&&i%9==0){cout << "door x is :" << doorx << " destination door x is :"<< destinationDoorx << endl; 
-				//dCont[doory][doorx]=STUCK;
-			}
-			
-			}
-			while((doory!=destinationDoory || doorx != destinationDoorx)&& i<100 );
-			//&& i<100 
-			//dCont[doory][doorx+1]= DOOR;
-			oldDungeon = *iterator;
-			
-			
-			}		
-}
-
-	for (list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end(); iterator != end; ++iterator) {
-			int doorx;
-			int doory = iterator->boundsBot[0]+(iterator->boundsBot[1]-iterator->boundsBot[0])/2;
-			if(iterator->boundsTop[0] == 1)
-			{
-				doorx = iterator->boundsTop[1];
-				dCont[doory][doorx]= DOOR;
-			}
-			else
-			{
-				doorx = iterator->boundsTop[0];
-				dCont[doory][doorx]= DOOR;
-			}
-		}
-
-	
+  //! adds paths between the list of rooms
+  generatePath();
 
 //! Place walls on the edges of the dungeon
 
@@ -414,14 +242,174 @@ for (list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end(
     dCont[height-1][j] = WALL;
   }
 
-  /*! 
-   * Pathfinding algorithm here maybe?  Set it up how you want.
-   *  Maybe should take args for options?  Still thinking this one out.
-   */
 
+}
 
+void Dungeon::generatePath(){
+  Subdungeon oldDungeon = *roomList.begin(); 
+  for (list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end(); iterator != end; ++iterator) {
+  //  if(startRoom != NULL)
+    int doory = iterator->boundsBot[0]+(iterator->boundsBot[1]-iterator->boundsBot[0])/2;
+    //int midx = iterator->
+    //int doorx = iterator->boundsTop[0];
+    //dCont[doory][doorx-1]= PATH;
+    //doorx = doorx-1;
+    int doorx;
+    
+    if(iterator->boundsTop[0] == 1)
+    {
+      doorx = iterator->boundsTop[1];
+      dCont[doory][doorx+1]= PATH;
+      doorx = doorx+1;
+    }
+    else
+    {
+      doorx = iterator->boundsTop[0];
+      dCont[doory][doorx-1]= PATH;
+      doorx = doorx-1;
+    }
+    
+    //if(oldDungeon
+    
+    if (iterator != roomList.begin()){
+      
+      //Subdungeon oldDungeon = roomList.back();
+      //cout << oldDungeon.boundsBot[0]  <<endl;
+      
+      int destinationDoory = oldDungeon.boundsBot[0]+(oldDungeon.boundsBot[1]-oldDungeon.boundsBot[0])/2;
+      int destinationDoorx = oldDungeon.boundsTop[0]-1;
+      
+      //cout << "the destination is: "<< destinationDoory << destinationDoorx << endl;
+      //cout << "the doors location is " << doorx << endl;
+      //cout << "the destinations is " << destinationDoorx << endl;
+      
+      //basic path finding stuff    
+      //while(doory!=destinationDoory && doorx != destinationDoorx-1){
+      
+      int i = 0;
+      // && i<100
+      //changing to a do while loop
+      
+      do
+      {
+        if(doory > destinationDoory && dCont[doory-1][doorx]!=WALL && dCont[doory-1][doorx]!=DOOR){
+            dCont[doory-1][doorx]= PATH;
+            doory = doory -1;
+        }
+        
+        if(doory < destinationDoory && dCont[doory+1][doorx]!=WALL && dCont[doory+1][doorx]!=DOOR){
+            dCont[doory+1][doorx]= PATH;
+            doory = doory +1;
+        }
+        
+        // && dCont[doory][doorx-1]!=WALL
+        if(doorx < destinationDoorx  && dCont[doory][doorx+1]!=WALL && dCont[doory][doorx+1]!=DOOR){
+              dCont[doory][doorx+1]= PATH;
+              doorx = doorx +1;
+        }
+        
+        if(doorx > destinationDoorx && dCont[doory][doorx-1]!=WALL  && dCont[doory][doorx-1]!=DOOR){
+            dCont[doory][doorx-1]= PATH;
+            doorx = doorx -1;
+        }
+        
+        //checks for getting stuck
+        //going up
+        if(doorx == destinationDoorx and doory<destinationDoory and dCont[doory+1][doorx]==WALL){
+          while(dCont[doory+1][doorx]==WALL)
+          {
+            dCont[doory][doorx-1]= PATH;
+            doorx = doorx -1;
+          }
+          dCont[doory+1][doorx]=PATH;
+          doory = doory+1;
+        }
+        
+        //going down
+        if(doorx == destinationDoorx and doory>destinationDoory and dCont[doory-1][doorx]==WALL){
+          while(dCont[doory-1][doorx]==WALL)
+          {
+            dCont[doory][doorx-1]= PATH;
+            doorx = doorx -1;
+          }
+          dCont[doory-1][doorx]=PATH;
+          doory = doory-1;
+        }
+        
+        //going right
+        if(doory == destinationDoory and doorx<destinationDoorx and dCont[doory][doorx+1]==WALL){
+          if(doory>(height/2)){
+            while(dCont[doory][doorx+1]==WALL)
+            {
+              dCont[doory-1][doorx]= PATH;
+              doory = doory -1;
+            }
+          }
+          else{
+            while(dCont[doory][doorx+1]==WALL)
+            {
+              dCont[doory+1][doorx]= PATH;
+              doory = doory+1;
+            }
+          }
+          dCont[doory][doorx+1]=PATH;
+          doorx = doorx+1;
+        }
+      
+        //going left
+        if(doory == destinationDoory and doorx>destinationDoorx and dCont[doory][doorx-1]==WALL){
+          if(doory>(height/2)){
+            while(dCont[doory][doorx-1]==WALL)
+            {
+              dCont[doory-1][doorx]= PATH;
+              doory = doory -1;
+            }
+          }
+          else{
+            while(dCont[doory][doorx-1]==WALL)
+            {
+              dCont[doory+1][doorx]= PATH;
+              doory = doory +1;
+            }
+          }
+          dCont[doory][doorx-1]=PATH;
+          doorx = doorx-1;
+        }
+      
+        i++;
+        //if(doory==destinationDoory and doorx == destinationDoorx) {cout<<"bingo"<<endl;}
+        
+        if(i>50&&i%9==0){
+          cout << "door x is :" << doorx << " destination door x is :"<< destinationDoorx << endl; 
+          //dCont[doory][doorx]=STUCK;
+        }
+      
+      }
+      while((doory!=destinationDoory || doorx != destinationDoorx)&& i<100 );
+      // end do-while loop
+      
+      //&& i<100 
+      //dCont[doory][doorx+1]= DOOR;
+      
+      // increment the previous subdungeon to the current subdungeon
+      oldDungeon = *iterator;
+    }
+  }
 
-
+  for (list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end(); iterator != end; ++iterator) {
+      int doorx;
+      int doory = iterator->boundsBot[0]+(iterator->boundsBot[1]-iterator->boundsBot[0])/2;
+      if(iterator->boundsTop[0] == 1)
+      {
+        doorx = iterator->boundsTop[1];
+        dCont[doory][doorx]= DOOR;
+      }
+      else
+      {
+        doorx = iterator->boundsTop[0];
+        dCont[doory][doorx]= DOOR;
+      }
+    }
 }
 
 /*! End Dungeon class */
