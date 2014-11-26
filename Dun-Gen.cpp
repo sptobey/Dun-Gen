@@ -39,12 +39,19 @@ public:
   Dungeon(int w, int h, unsigned long int s);
   Dungeon(int w, int h);
   Dungeon();
+  ~Dungeon();
   unsigned long int seed;
   int height, width;
   void outputDungeon(std::string name);
   void printDungeon(string fileName);
   list<Subdungeon> roomList;
 };
+
+Dungeon::~Dungeon() {
+  delete[] dCont;
+  // need to free each Subdungeon class within roomList
+}
+
 /*!
  * @brief Full Constructor
  * 
@@ -459,6 +466,6 @@ int main() {
   {
     my_dungeon.printDungeon(n);
   }
-    
+  
   return 0;
 }

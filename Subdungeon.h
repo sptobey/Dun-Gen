@@ -16,6 +16,7 @@ class Subdungeon {
     void randDescribe();
   public:
     Subdungeon(int shape, int posx, int posy, int h, int w);
+    ~Subdungeon();
     unsigned short int key;  //What number each room corresponds to.
     static unsigned short int total;
     std::string desc;
@@ -26,6 +27,11 @@ class Subdungeon {
 };
 
 unsigned short int Subdungeon::total = 0;
+
+Subdungeon::~Subdungeon() {
+  delete[] boundsTop;
+  delete[] boundsBot;
+}
 
 /*! 
  * @brief Subdungeon constructor
