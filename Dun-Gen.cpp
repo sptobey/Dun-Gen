@@ -108,10 +108,10 @@ void Dungeon::outputDungeon(string dungeon_name){
       } else if(dCont[i][j] == WALL) {
         ofs << '#';
       } else if(dCont[i][j] == PATH) {
-        ofs << '=';
-      }  
-      
-      
+        ofs << '.';
+      } else if(dCont[i][j] == DOOR) {
+        ofs << '$';
+      }
       
       else {
         ofs<<dCont[i][j];
@@ -224,15 +224,14 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
         dCont[posyEnd][j] = WALL;
       }
       //!adds room to a list of rooms
-     roomList.push_back(* rooms[k]);
+      roomList.push_back(* rooms[k]);
     }
   }
 
   //! adds paths between the list of rooms
   generatePath();
 
-//! Place walls on the edges of the dungeon
-
+  //! Place walls on the edges of the dungeon
   for(int i = 0; i < height; i++){
     dCont[i][0] = WALL;
     dCont[i][width-1]= WALL;
@@ -241,7 +240,22 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     dCont[0][j] = WALL;
     dCont[height-1][j] = WALL;
   }
-
+  
+  //! Place walls surrounding paths
+  for(int i = 1; i < height-1; i++){
+    for(int j = 1; j < width-1; j++){
+      if(dCont[i][j] == PATH){
+        int left  = dCont[i  ][j-1];
+        int right = dCont[i  ][j+1];
+        int up    = dCont[i+1][j  ];
+        int down  = dCont[i-1][j  ];
+        dCont[i  ][j-1] = (left != PATH && left != DOOR) ? WALL : left;
+        dCont[i  ][j+1] = (right != PATH && right != DOOR) ? WALL : right;
+        dCont[i+1][j  ] = (up != PATH && up != DOOR) ? WALL : up;
+        dCont[i-1][j  ] = (down != PATH && down != DOOR) ? WALL : down;
+      }
+    }
+  }
 
 }
 
