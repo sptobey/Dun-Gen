@@ -19,6 +19,7 @@ class Subdungeon {
     Subdungeon(int shape, int posx, int posy, int h, int w, long unsigned int s);
     ~Subdungeon();
     unsigned short int key;  //What number each room corresponds to.
+	void rekey(unsigned short int k);
     static unsigned short int total;
     std::string desc;
     short unsigned int* boundsTop;
@@ -26,6 +27,7 @@ class Subdungeon {
     short unsigned int height;
     short unsigned int width;
 	long unsigned int seed;
+	string description();
 };
 
 unsigned short int Subdungeon::total = 0;
@@ -57,6 +59,7 @@ Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w, long unsigne
   shapeSize(shape, posx, posy, h, w);
   randDescribe();
 }
+
 /*! 
  * @brief Subdungeon shape size constructor
  * 
@@ -83,6 +86,11 @@ void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
     cout << "Invalid shape.";
   }
 }
+
+void Subdungeon::rekey(unsigned short int k){
+  Subdungeon::key = k;
+}
+
 /*! 
  * @brief Subdungeon output description
  * 
@@ -90,16 +98,15 @@ void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
  * @param y height in feet
  */
 void Subdungeon::randDescribe(){  //! More might be added to this later
-  srand(Subdungeon::seed);
   stringstream x;
   stringstream y;
-  x << Subdungeon::width-2;
-  y << Subdungeon::height-2;
+  x << (Subdungeon::width-2) * 5;
+  y << (Subdungeon::height-2) * 5;
   std::string xs, ys;
   xs = x.str();
   ys = y.str();
   std::string hold;
-  hold = "This room is";
+  hold = "This room is ";
   hold.append(xs);
   hold.append(" feet by ");
   hold.append(ys);
@@ -427,6 +434,19 @@ string Subdungeon::roomtype(){
   
   return hold;
   
+}
+
+string Subdungeon::description(){
+  string hold, zs;
+  stringstream z;
+  z << Subdungeon::key;
+  zs = z.str();
+  hold = "Room ";
+  hold.append(zs);
+  hold.append("\n");
+  hold.append(Subdungeon::desc);
+  hold.append("\n");
+  return hold;
 }
 
 

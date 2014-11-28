@@ -126,6 +126,9 @@ void Dungeon::outputDungeon(string dungeon_name){
     }
     ofs<<"\n";
   }
+  for(list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end();  iterator != end; ++iterator){
+    ofs<< iterator->description();
+  }
   ofs.close();
 }
 
@@ -169,7 +172,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
     int posy = (rand() % (Dungeon::height - 4))+1;  //! corner (vertical) an be anywhere except edges and 2 units from the bottom
     int roomWidth = 0;
     int roomHeight = 0;
-    //! Change dimentions of the room until we have a room area between our max and our min.
+    //! Change dimensions of the room until we have a room area between our max and our min.
     while ((roomWidth*roomHeight < roomMin) || (roomWidth*roomHeight > roomMax)){ 
       if(posx >= (Dungeon::width/2)) {
         int r = rand()%((Dungeon::width/2) - 3 + (width%2))+3;
@@ -188,6 +191,7 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
   }
   
   //! Placing rooms; will just re-key and place a different room if a room fails a test.
+  short unsigned int n = 1;
   for (int k = 0; k < roomNumMax; ++k){
     bool roomOverlap = false;
     int posx = rooms[k]->boundsTop[0]; 
@@ -201,6 +205,8 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
      * using Dungeon::buildEmpty convention that i associated with height, j with width
      * Check every x,y position in potential room location by nested loops
      */
+	 // For some reason, when I run this, very few rooms get placed (2 or 3 in a 50x50 dungeon)
+	 // Is this reproducible?
     for (int i = posy; i <= posyEnd; ++i){
       for (int j = posx; j <= posxEnd; ++j){
         //! Check if each space is blank, if not, then room overlap
@@ -231,6 +237,8 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
         dCont[posyEnd][j] = WALL;
       }
       //!adds room to a list of rooms
+	  rooms[k]->rekey(n);
+	  n++;
       roomList.push_back(* rooms[k]);
     }
   }
@@ -265,7 +273,10 @@ void Dungeon::buildDungeon(unsigned short rmin, unsigned short rmax, unsigned sh
   }
 
 }
-
+/*!
+ * @brief Finds and creates corridors between rooms.
+ * 
+ * */
 void Dungeon::generatePath(){
   Subdungeon oldDungeon = *roomList.begin(); 
   for (list<Subdungeon>::iterator iterator = roomList.begin(), end = roomList.end(); iterator != end; ++iterator) {
