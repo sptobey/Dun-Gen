@@ -33,8 +33,8 @@ class Subdungeon {
 unsigned short int Subdungeon::total = 0;
 
 Subdungeon::~Subdungeon() {
-  delete[] boundsTop;
-  delete[] boundsBot;
+  //delete boundsTop;
+  //delete boundsBot;
 }
 
 /*! 
