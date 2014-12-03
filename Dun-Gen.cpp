@@ -150,7 +150,9 @@ void Dungeon::buildEmpty(){
     }
   }
 }
-
+/*!
+ * @brief Prints the dungeon from the text file to the terminal window.
+ * */
 void Dungeon::printDungeon(string fileName){
   ifstream dungeonOutput;
   fileName.append(".txt"); 
