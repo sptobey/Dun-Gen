@@ -98,6 +98,10 @@ Dungeon::Dungeon(){
   buildDungeon(9, 225, 100);
 }
 
+/*!
+ * @brief outputs the dungeon map and description a named text file.
+ * @param dungeon_name The name of the text file.
+ * */
 void Dungeon::outputDungeon(string dungeon_name){
   dungeon_name.append(".txt");
   const char* c = dungeon_name.c_str();
