@@ -47,8 +47,6 @@ Subdungeon::~Subdungeon() {
  * @param shape room shape designator (rectangles, right triangles, 
  * equalaterial triangles, etc)
  * 
- * will be different for other room shapes, particularly hexagons 
- * desc is room description, which should be created by a function.
  */
 Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w, long unsigned int s){
   total++;
@@ -69,9 +67,6 @@ Subdungeon::Subdungeon(int shape, int posx, int posy, int h, int w, long unsigne
  * @param w width for subdungeon
  * @param s room shape designator (rectangles, right triangles, 
  * equalaterial triangles, etc)
- * 
- * will be different for other room shapes, particularly hexagons 
- * desc is room description, which should be created by a function.
  */
 void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
   if(s == 0){ //! Rectangular room; we may not have time to implement more
@@ -87,6 +82,9 @@ void Subdungeon::shapeSize(int s, int posx, int posy, int h, int w){
   }
 }
 
+/*!
+ * @brief Changes the Subdungeon int key to the new int k.
+ * */
 void Subdungeon::rekey(unsigned short int k){
   Subdungeon::key = k;
 }
@@ -431,11 +429,80 @@ string Subdungeon::roomtype(){
 	  return "";
 	}
   }
+  else if (type == 's' || type == 'r') {
+    roll = rand() % 20;
+	switch (roll) {
+	  case 0:
+	    hold = "There is an altar to a nature god here, which radiates a blessing.  ";
+	    break;
+	  case 1:
+	    hold = "There is an altar to a horned devil here, it radiates despair.  ";
+	    break;
+	  case 2:
+	    hold = "There is a mist filled stone archway here; it leads elsewhere.  ";
+	    break;
+	  case 3:
+	    hold = "There is a gargoyle statue with one open palm here; if given a gem, it crushes and eats the gem.  ";
+	    break;
+	  case 4:
+	    hold = "There is a pond here that has fish with human faces swimming in it.  ";
+	    break;
+	  case 5:
+	    hold = "There is a statue of a god of death here; it has a paralysing gaze.  ";
+	    break;
+	  case 6:
+	    hold = "There is an underground river that flows uphill here.  ";
+	    break;
+	  case 7:
+	    hold = "There are several statues hung upside-down by ropes; their faces are in pools of water.  ";
+	    break;
+	  case 8:
+	    hold = "There is a mirror here; it creates a doppelgänger of any creature that looks through it.  ";
+	    break;
+	  case 9:
+	    hold = "There is a grate on the floor here; grunts and screaming can be heard on the other side.  ";
+	    break;
+	  case 10:
+	    hold = "This room is filled with chairs and gold; anyone who takes the gold and attempts to leave finds the chairs animate and attack them.  ";
+	    break;
+	  case 11:
+	    hold = "There is a bottle of a strange blue drink on a table here; anyone who drinks it experiences a random magical effect.  ";
+	    break;
+	  case 12:
+	    hold = "There are bas relief carvings of horses in wall.  Faint neighing can be heard all throughout the room.  ";
+	    break;
+	  case 13:
+	    hold = "There is a green demon's face on the wall, with a pitch black mouth carved out.  Anyone who reaches their hand inside the mouth is annihilated instantly.  ";
+	    break;
+	  case 14:
+	    hold = "There is a pool of crystal clear water here; anything that falls in is cut as if by a million razors.  ";
+	    break;
+	  case 15:
+	    hold = "There is a statue here with burning eyes.  ";
+	    break;
+	  case 16:
+	    hold = "There is a fountain here; wishes made in the fountain come true with a twist.  ";
+	    break;
+	  case 17:
+	    hold = "There is a window here; if opened and crawled through, leads to an extra-dimensional shop.  ";
+	    break;
+	  case 18:
+	    hold = "This room is pure white; anything that touches the walls, ceiling, or floor leaves a black mark behind.  ";
+	    break;
+	  case 19:
+	    hold = "This room is an elevator.  ";
+	    break;
+	}
+  }
   
   return hold;
   
 }
 
+
+/*!
+ * @brief Returns the desc string of the Subdungeon.
+ * */
 string Subdungeon::description(){
   string hold, zs;
   stringstream z;
