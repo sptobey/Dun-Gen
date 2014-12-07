@@ -21,4 +21,5 @@ Dun-Gen
 - Main Program: Dun-Gen.cpp, Subdungeon.h, Makefile
 - Test files: seedTest.cpp
 - Documentation: html, latex, Doxyfile
+	Doxygen latex PDF located at: Dun-Gen/latex/refman.pdf
 - README.md: this file.
